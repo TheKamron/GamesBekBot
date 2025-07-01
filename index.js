@@ -11,11 +11,11 @@ const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 await mongoose.connect(process.env.MONGO_URI);
 const adminId = process.env.ADMIN_ID;
 const ownerId = process.env.OWNER_ID;
+const PORT = process.env.PORT || 3000;
 
 const tempSteps = new Map();
 const tempSteps_2 = new Map();
 const subChannels = new Set();
-const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   res.send("Bot is running...");
