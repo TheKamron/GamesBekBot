@@ -46,7 +46,7 @@ bot.onText(/\/start/, async (msg) => {
     });
   }
 
-  bot.sendMessage(chatId, `Assalomu alaykum 👋🏻\nGames Bek botiga xush kelibsiz 💪🏻 sizga kerakli kodni yuboring 🤝🏻`);
+  bot.sendMessage(chatId, ` Assalomu alaykum 👋🏻\nGames Bek botiga xush kelibsiz 💪🏻 sizga kerakli kodni yuboring 🤝🏻\nKodlar ro’yxati: <a href="https://t.me/gamesbek_uz"><b>@gamesbek_uz</b></a>`, {parse_mode: "HTML"});
 });
 
 bot.onText(/\/kanal/, async (msg) => {
@@ -208,6 +208,27 @@ bot.onText(/\/list/, async (msg) => {
   });
   bot.sendMessage(userId, text, { parse_mode: 'Markdown' });
 });
+
+bot.onText(/\/stats/, async (msg) => {
+  const userId = msg.from.id
+  if(userId != adminId && userId != ownerId) return;
+  const users = await User.find().sort({joinedAt: -1}); // all users
+  if(users.length == 0 ) return bot.sendMessage(userId, '📭 Hali hech qanday foydalanuvchi mavjud emas.')
+
+  let text = `📊 Foydalanuvchilar statistikasi: (${users.length} ta)\n\n`;
+
+  for (const user of users.slice(0, 50)) { // faqat 50 ta chiqariladi
+    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+    const username = user.username ? `@${user.username}` : '—';
+    const date = user.createdAt ? new Date(user.createdAt).toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' }) : '—';
+
+    text += `🆔 ID: <code>${user.userId}</code>\n👤 <b>${fullName}</b>\n🔗 <i>${username}</i>\n🕒 ${date}\n\n`;
+  }
+
+  return bot.sendMessage(userId, text, { parse_mode: 'HTML' });
+
+
+})
 
 bot.onText(/\/cancel/, (msg) => {
   tempSteps.delete(msg.from.id);

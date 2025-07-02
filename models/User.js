@@ -5,7 +5,7 @@ const UserSchema = new Schema({
   first_name: String,
   username: String,
   language_code: String,
-  joined_at: { type: Date, default: Date.now }
+  joinedAt: {type: Date, default: Date.now},
 }, {timestamps: true});
 
 
