@@ -44,6 +44,9 @@ bot.onText(/\/start/, async (msg) => {
     await bot.sendMessage(adminId, `🆕 *Yangi foydalanuvchi qo‘shildi:*\n👤 Ism: ${fullName}\n🔗 Username: ${username}\n🆔 ID: ${user.id}`, {
       parse_mode: 'Markdown'
     });
+    await bot.sendMessage(ownerId, `🆕 *Yangi foydalanuvchi qo‘shildi:*\n👤 Ism: ${fullName}\n🔗 Username: ${username}\n🆔 ID: ${user.id}`, {
+      parse_mode: 'Markdown'
+    });
   }
 
   bot.sendMessage(chatId, ` Assalomu alaykum 👋🏻\nGames Bek botiga xush kelibsiz 💪🏻 sizga kerakli kodni yuboring 🤝🏻\nKodlar ro’yxati: <a href="https://t.me/gamesbek_uz"><b>@gamesbek_uz</b></a>`, {parse_mode: "HTML"});
