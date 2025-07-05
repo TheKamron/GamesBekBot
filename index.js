@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import User from "./models/User.js";
 import Media from "./models/Media.js";
-import express from "express"
+import express from "express";
+import moment from "moment";
 dotenv.config();
 
 const app = express();
@@ -213,25 +214,25 @@ bot.onText(/\/list/, async (msg) => {
 });
 
 bot.onText(/\/stats/, async (msg) => {
-  const userId = msg.from.id
-  if(userId != adminId && userId != ownerId) return;
-  const users = await User.find().sort({joinedAt: -1}); // all users
-  if(users.length == 0 ) return bot.sendMessage(userId, '📭 Hali hech qanday foydalanuvchi mavjud emas.')
+  const userId = msg.from.id;
+  if (userId != adminId && userId != ownerId) return;
 
-  let text = `📊 Foydalanuvchilar statistikasi: (${users.length} ta)\n\n`;
+  const users = await User.find().sort({ createdAt: -1 });
+  const media = await Media.find();
+  const userCount = users.length;
+  const mediaCount = media.length;
 
-  for (const user of users.slice(0, 50)) { // faqat 50 ta chiqariladi
-    const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
-    const username = user.username ? `@${user.username}` : '—';
-    const date = user.createdAt ? new Date(user.createdAt).toLocaleString('uz-UZ', { timeZone: 'Asia/Tashkent' }) : '—';
-
-    text += `🆔 ID: <code>${user.userId}</code>\n👤 <b>${fullName}</b>\n🔗 <i>${username}</i>\n🕒 ${date}\n\n`;
+  let latestUserTime = "—";
+  if (userCount > 0) {
+    const latest = users[0].createdAt;
+    latestUserTime = moment(latest).format("HH:mm DD.MM.YYYY");
   }
 
-  return bot.sendMessage(userId, text, { parse_mode: 'HTML' });
+  const text = `📊 <b>Statistika:</b>\n\n👥 Foydalanuvchilar soni: <b>${userCount}</b>\n📁 Jami fayllar: <b>${mediaCount}</b>\n🕓 Oxirgi start bosilgan vaqt: <b>${latestUserTime}</b>`;
 
+  bot.sendMessage(userId, text, { parse_mode: "HTML" });
+});
 
-})
 
 bot.onText(/\/cancel/, (msg) => {
   tempSteps.delete(msg.from.id);
