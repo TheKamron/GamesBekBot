@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import User from "./models/User.js";
 import Media from "./models/Media.js";
 import express from "express";
-import moment from "moment";
+import moment from "moment-timezone";
 dotenv.config();
 
 const app = express();
@@ -225,7 +225,7 @@ bot.onText(/\/stats/, async (msg) => {
   let latestUserTime = "—";
   if (userCount > 0) {
     const latest = users[0].createdAt;
-    latestUserTime = moment(latest).format("HH:mm DD.MM.YYYY");
+    latestUserTime = moment(latest).tz("Asia/Tashkent").format("HH:mm DD.MM.YYYY");
   }
 
   const text = `📊 <b>Statistika:</b>\n\n👥 Foydalanuvchilar soni: <b>${userCount}</b>\n📁 Jami fayllar: <b>${mediaCount}</b>\n🕓 Oxirgi start bosilgan vaqt: <b>${latestUserTime}</b>`;
